@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<map name="testmap1" scale="30">
+
+	<static-objects>
+		<rectangle id="rect00" x="0" y="-1" width="40" height="1" />
+		<!-- comment here -->
+		<rectangle id="rect01" x="0" y="0" width="20" height="1" />
+		<!-- comment here -->
+	</static-objects>
+	
+	<dynamic-objects>
+		<rectangle id="rect02" x="-5" y="10" width="0.25" height="0.25" rotation="30" />
+		<rectangle id="rect03" x="4" y="10" width="0.25" height="0.25" rotation="60" />
+		<!--<rectangle id="rect04" x="5" y="10" width="0.25" height="0.25" rotation="5" />
+		<rectangle id="rect05" x="6" y="10" width="0.25" height="0.25" rotation="10" />
+		-->
+		<!-- comment here -->
+		<!--
+		<rectangle id="rect06" x="7" y="10" width="0.25" height="0.25" rotation="150" />
+		<rectangle id="rect07" x="8" y="10" width="0.25" height="0.25" rotation="220" />
+		<rectangle id="rect08" x="9" y="10" width="0.25" height="0.25" rotation="70" />
+		<rectangle id="rect09" x="0" y="10" width="0.25" height="0.25" rotation="300" />
+		-->
+	</dynamic-objects>
+	
+	<player-objects>
+		<obj id="player_car1" type="trike_car" x="-10" y="7" rotation="0" />
+		<!-- comment here -->
+		<!--<obj id="player_car2" type="trike_car" x="-7" y="7" rotation="0" />-->
+	</player-objects>
+</map>

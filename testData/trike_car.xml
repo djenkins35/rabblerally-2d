@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<player-object type="trike_car">
+	
+	<bodies>
+		<body id="root" x="0" y="0" rot="0" >
+			<shape type="rectangle" x="0" y="0" w="0.75" h="0.25" rot="0" />
+			<shape type="rectangle" x="0" y="-0.5" w="0.25" h="1" rot="0" />
+		</body>
+		<body id="left_wheel" x="-0.375" y="0" rot="0">
+			<shape type="rectangle" x="0" y="0" w="0.35" h="0.45" rot="0" />
+		</body>
+		<body id="right_wheel" x="0.375" y="0" rot="0">
+			<shape type="rectangle" x="0" y="0" w="0.35" h="0.45" rot="0" />
+		</body>
+		<body id="rear_wheel"  x="0" y="-1" rot="0">
+			<shape type="rectangle" x="0" y="0" w="0.35" h="0.45" rot="0" />
+		</body>
+	</bodies>
+	
+	<!--
+		jd.enableMotor = true;
+		jd.maxMotorTorque = 10;
+		jd.enableLimit = true;
+		jd.lowerAngle = -1 * MAX_STEER_ANGLE;
+		jd.upperAngle = MAX_STEER_ANGLE;
+		jd.Initialize(_guy, _leftBox, _leftBox.GetWorldCenter());
+		_leftJoint = b2RevoluteJoint(_world.CreateJoint(jd));
+		//void Initialize(b2Body* bodyA, b2Body* bodyB, const b2Vec2& anchor);
+	-->
+	<joints>
+		<joint type="b2RevoluteJointDef" maxMotorTorque="10" lowerAngle="-30" upperAngle="30"
+			bodyA="left_wheel" bodyB="root" anchorX="-0.375" anchorY="0" />
+		<joint type="b2RevoluteJointDef" maxMotorTorque="10" lowerAngle="-30" upperAngle="30"
+			bodyA="right_wheel" bodyB="root" anchorX="0.375" anchorY="0" />
+		<joint type="b2RevoluteJointDef" maxMotorTorque="10" lowerAngle="-30" upperAngle="30"
+			bodyA="rear_wheel" bodyB="root" anchorX="0" anchorY="-1" />
+	</joints>
+	
+	<controllers />
+	
+</player-object>
