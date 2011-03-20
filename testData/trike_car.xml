@@ -18,16 +18,6 @@
 		</body>
 	</bodies>
 	
-	<!--
-		jd.enableMotor = true;
-		jd.maxMotorTorque = 10;
-		jd.enableLimit = true;
-		jd.lowerAngle = -1 * MAX_STEER_ANGLE;
-		jd.upperAngle = MAX_STEER_ANGLE;
-		jd.Initialize(_guy, _leftBox, _leftBox.GetWorldCenter());
-		_leftJoint = b2RevoluteJoint(_world.CreateJoint(jd));
-		//void Initialize(b2Body* bodyA, b2Body* bodyB, const b2Vec2& anchor);
-	-->
 	<joints>
 		<joint type="b2RevoluteJointDef" maxMotorTorque="10" lowerAngle="-30" upperAngle="30"
 			bodyA="left_wheel" bodyB="root" anchorX="-0.375" anchorY="0" />
