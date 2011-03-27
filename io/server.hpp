@@ -19,6 +19,7 @@
 #include <Box2D/Box2D.h>
 #include "../xml/xml_message.hpp"
 #include "../xml/level_loader.hpp"
+#include "../debug/Debug.hpp"
 
 
 using boost::asio::ip::tcp;
@@ -28,18 +29,31 @@ const int MAX_CONNECTIONS = 32;
 class server
 {
 public:
-	server(boost::asio::io_service& io_service, short port, int update_interval)
+	bool is_debug;
+
+public:
+	server(boost::asio::io_service& io_service, short port, int update_interval,
+		const bool debug)
 		: io_service_(io_service), acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
 			_room(),
 			_update_interval(update_interval),
 			timer1(io_service, boost::posix_time::millisec(update_interval)),
-			_ticks(0)
+			m_world(0),
+			is_debug(debug)
 	{
 		session_ptr new_session(new session(io_service_, _room));
 		acceptor_.async_accept(new_session->socket(),
 			boost::bind(&server::handle_accept, this, new_session,
 				boost::asio::placeholders::error));
 		timer1.async_wait(boost::bind(&server::tick, this, boost::asio::placeholders::error));
+		
+		
+		if (debug)
+		{
+			_pDebugDraw = new Debug();
+			if (!_pDebugDraw->init())
+				cout << "ERROR, server::Constructor, failed to initialize Debug\n";
+		}
 	}
 	
 private:
@@ -50,8 +64,8 @@ private:
 	xml_message _xmessage;
 	level_loader _loader;
 	int _update_interval;
-	int _ticks;
 	b2World* m_world;
+	Debug* _pDebugDraw;
 	
 	void handle_accept(session_ptr new_session, const boost::system::error_code& error)
 	{
@@ -84,10 +98,15 @@ private:
 			if (_xmessage.sAction() == "load_map")
 			{
 				std::cout << "server::tick(), load map, " << _xmessage.sMap_name() << std::endl;
-				if (m_world) delete m_world;
+				if (m_world != NULL) delete m_world;
 				_loader.load_file(_xmessage.sMap_name());
 				m_world = _loader.world();
-				_ticks = 0;
+				
+				
+				// add world pointer to debug draw
+				if (is_debug && _pDebugDraw != NULL)
+					_pDebugDraw->add_b2World(m_world);
+				
 				
 				// send the level xml to each client
 				string str;
@@ -104,9 +123,8 @@ private:
 			}
 		}
 		
-		// step world
-		//*
-		if (m_world/* && _ticks < 5*/)
+		
+		if (m_world != NULL)
 		{
 			float fInterval = _update_interval;
 			m_world->Step(fInterval / 1000, 6, 2);
@@ -129,7 +147,6 @@ private:
 					string* pStr = static_cast<string*>(b->GetUserData());
 					// add to client update message
 					/*
-					cout << "_ticks: " << _ticks;
 					cout << ", dynamic body " << *pStr;
 					cout << " position: " << b->GetWorldCenter().x;
 					cout << ", " << b->GetWorldCenter().y << endl;
@@ -147,7 +164,6 @@ private:
 						+ " rotation=\"" + rot.str() + "\" />";
 				}
 				
-				
 				b = b->GetNext();
 			}
 			
@@ -159,9 +175,20 @@ private:
 				//s = "-------begin message--------\n" + s;
 				_room.deliver(s);
 			}
-			_ticks++;
 		}
-		//*/
+		
+		
+		if (is_debug && _pDebugDraw != NULL)
+		{
+			_pDebugDraw->debug_tick();
+			
+			if (_pDebugDraw->quit == true)
+			{
+				delete m_world;
+				io_service_.stop();
+				return;
+			}
+		}
 		
 		
 		add_time();

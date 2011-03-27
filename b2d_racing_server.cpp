@@ -9,6 +9,7 @@ namespace {
 	const int UPDATE_INTERVAL = 1000 / 60; /* fps */
 	boost::asio::io_service io_service;
 	server* server1;
+	const bool DEBUG_BUILD = true;
 }
 
 
@@ -25,20 +26,10 @@ int main(int argc, char* argv[])
 		}
 		
 		
-		//initBox2D();
-		//m_xmessage = new xml_message();
-		
 		/// start up io service
-		server1 = new server(io_service, atoi(argv[1]), UPDATE_INTERVAL);
-		//timer1.async_wait(tick);
+		server1 = new server(io_service, atoi(argv[1]), UPDATE_INTERVAL, DEBUG_BUILD);
 		cout << "starting server on port " << argv[1] << endl;
 		io_service.run();
-		
-		
-		// When the world destructor is called, all bodies and joints are freed. This can
-		// create orphaned pointers, so be careful about your world management.
-		//delete m_world;
-		//m_world = NULL;
 	}
 	catch (std::exception& e)
 	{
