@@ -5,6 +5,12 @@
 #include <cmath>
 
 
+namespace LevelLoader
+{
+	static const b2Vec2 GRAVITY(0.0f, -0.0f);
+	static const bool DO_SLEEP = true;
+}
+
 using std::string;
 using std::cout;
 using std::endl;
@@ -15,6 +21,7 @@ class level_loader
 public :
 	level_loader() {};
 	~level_loader() {};
+	
 	
 	void load_file(string filename)
 	{
@@ -34,9 +41,10 @@ public :
 		
 		// init box2d world
 		
-		b2Vec2 gravity(0.0f, -10.0f);
-		bool doSleep = true;
-		m_world = new b2World(gravity, doSleep);
+		//b2Vec2 gravity(0.0f, -10.0f);
+		//bool doSleep = true;
+		//m_world = new b2World(gravity, doSleep);
+		m_world = new b2World(LevelLoader::GRAVITY, LevelLoader::DO_SLEEP);
 		
 		
 		// init objects from level file
