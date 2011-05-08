@@ -1,2 +1,5 @@
+xml/tinyxml_2_6_1
+Box2D/
+*.o
 b2d_racing_server
 

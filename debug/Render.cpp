@@ -21,17 +21,6 @@
 //#include "freeglut/GL/glut.h"
 #include <GL/glut.h>
 
-#include <cstdio>
-#include <cstdarg>
-
-#include <cstring>
-
-DebugDraw::DebugDraw()
-{
-	std::cout << "DebugDraw::DebugDraw(), wtf?\n";
-};
-
-DebugDraw::~DebugDraw() {};
 
 void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
@@ -201,3 +190,4 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& c)
 	glVertex2f(aabb->lowerBound.x, aabb->upperBound.y);
 	glEnd();
 }
+
