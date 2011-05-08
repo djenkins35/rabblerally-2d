@@ -21,6 +21,7 @@
 
 #include <Box2D/Box2D.h>
 
+
 struct b2AABB;
 
 // This class implements debug drawing callbacks that are invoked
@@ -28,9 +29,6 @@ struct b2AABB;
 class DebugDraw : public b2DebugDraw
 {
 public:
-	DebugDraw();
-	~DebugDraw();
-	
 	void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
 
 	void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
