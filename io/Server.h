@@ -24,7 +24,6 @@
 #include "GameRoom.h"
 #include "../xml/XMLMessage.h"
 #include "../xml/LevelLoader.h"
-//#include "../xml/level_loader.hpp"
 #include "../debug/Debug.h"
 
 
@@ -48,7 +47,6 @@ private:
 	tcp::acceptor acceptor_;
 	GameRoom _room;
 	XMLMessage _xmessage;
-	//level_loader _loader;
 	LevelLoader::LevelLoader _loader;
 	int _update_interval;
 	b2World* m_world;

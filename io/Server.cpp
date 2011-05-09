@@ -17,6 +17,7 @@ namespace B2DRacing {
 
 using boost::asio::ip::tcp;
 using std::cout;
+using std::endl;
 
 
 Server::Server(boost::asio::io_service& io_service, short port, int update_interval,
@@ -61,7 +62,7 @@ void Server::tick(const boost::system::error_code& e)
 	// read messages from clients
 	std::vector<std::string> messages = _room.read_messages();
 	
-	/*
+	
 	for (int i = 0, len = messages.size(); i < len; i++)
 	{
 		//cout << messages[i] << std::endl;
@@ -70,15 +71,15 @@ void Server::tick(const boost::system::error_code& e)
 		if (_xmessage.sAction() == "get_map_list")
 		{
 			cout << "server::tick(), get map list\n";
-			//_loader.get_map_list();
+			_loader.get_map_list();
 		}
 		
 		if (_xmessage.sAction() == "load_map")
 		{
 			std::cout << "server::tick(), load map, " << _xmessage.sMap_name() << std::endl;
 			if (m_world != NULL) delete m_world;
-			//_loader.load_file(_xmessage.sMap_name());
-			//m_world = _loader.world();
+			_loader.load_file(_xmessage.sMap_name());
+			m_world = _loader.world();
 			
 			
 			// add world pointer to debug draw
@@ -88,7 +89,7 @@ void Server::tick(const boost::system::error_code& e)
 			
 			// send the level xml to each client
 			string str;
-			//_loader.Print(str);
+			_loader.Print(str);
 			_room.deliver(str);
 			add_time();
 			return;
@@ -100,10 +101,8 @@ void Server::tick(const boost::system::error_code& e)
 			return;
 		}
 	}
-	*/
 	
 	
-	/*
 	if (m_world != NULL)
 	{
 		float fInterval = _update_interval;
@@ -126,11 +125,11 @@ void Server::tick(const boost::system::error_code& e)
 				//	stored there to be able to dereference it
 				std::string* pStr = static_cast<string*>(b->GetUserData());
 				// add to client update message
-				/\*
+				/*
 				cout << ", dynamic body " << *pStr;
 				cout << " position: " << b->GetWorldCenter().x;
 				cout << ", " << b->GetWorldCenter().y << endl;
-				*\/
+				//*/
 				
 				// create message
 				std::stringstream x, y, rot;
@@ -156,7 +155,7 @@ void Server::tick(const boost::system::error_code& e)
 			_room.deliver(s);
 		}
 	}
-	*/
+	
 	
 	if (is_debug && _pDebugDraw != NULL)
 	{

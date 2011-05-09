@@ -10,6 +10,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 #include <Box2D/Box2D.h>
 #include <cmath>
 
@@ -25,6 +26,7 @@
 
 
 using std::string;
+using std::vector;
 
 
 class LevelLoader
@@ -40,9 +42,9 @@ private :
 	string _filename;
 	b2World* m_world;
 	float _scale;
-	//TiXmlDocument _doc;
-	//std::vector<TiXmlDocument*> _player_types;
-	//std::vector<b2Body*> _player_bodies;
+	TiXmlDocument _doc;
+	vector<TiXmlDocument*> _player_types;
+	vector<b2Body*> _player_bodies;
 	
 	
 	b2Body* createRectangle(const string id, const float& x, const float& y,

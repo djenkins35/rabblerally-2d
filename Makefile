@@ -14,6 +14,8 @@ CFLAGS =-Wall
 LDFLAGS =-lBox2D -lboost_system -lSDL -lGL -lGLU
 INCLUDES =-I xml/ -I io/ -I debug/
 
+# note, relying on the tinyxml Makefile to actually build the tinyxml object files with
+#	-DTIXML_USE_STL for now
 
 all: $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS) $(INCLUDES)

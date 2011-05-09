@@ -15,7 +15,6 @@ using std::endl;
 
 void LevelLoader::LevelLoader::load_file(string filename)
 {
-	/*
 	_filename = filename;
 	cout << "level_loader::load_file(), loading filename: " << filename << endl;
 	
@@ -97,7 +96,6 @@ void LevelLoader::LevelLoader::load_file(string filename)
 	{
 		_player_bodies.push_back(createPlayer(pPlayers));
 	}
-	*/
 }
 
 string LevelLoader::LevelLoader::get_map_list()
@@ -109,7 +107,7 @@ string LevelLoader::LevelLoader::get_map_list()
 
 bool LevelLoader::LevelLoader::Print(string &str)
 {
-	/*
+	//*
 	if (_doc.Error() && _player_types.size() < 1)
 		return false;
 	
@@ -126,8 +124,8 @@ bool LevelLoader::LevelLoader::Print(string &str)
 	
 	_doc.Accept(&p);
 	str = p.Str();
-	*/
-	return true;
+	//*/
+	//return true;
 }
 
 b2World* LevelLoader::LevelLoader::world()
@@ -351,7 +349,6 @@ b2RevoluteJointDef LevelLoader::LevelLoader::createRevoluteJointDef(TiXmlElement
  */
 TiXmlDocument* LevelLoader::LevelLoader::get_player_type(const string &sType)
 {
-	/*
 	TiXmlDocument* pCar_type = NULL;
 	string sLoop;
 	
@@ -388,8 +385,6 @@ TiXmlDocument* LevelLoader::LevelLoader::get_player_type(const string &sType)
 	
 	
 	return pCar_type;
-	*/
-	return NULL;
 }
 
 b2Body* LevelLoader::LevelLoader::getBodyByName(string name)
