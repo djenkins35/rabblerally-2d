@@ -6,6 +6,7 @@
 
  
 #include "LevelLoader.h"
+#include <cmath>
 
 
 using std::string;
@@ -29,9 +30,14 @@ void LevelLoader::LevelLoader::load_file(string filename)
 	}
 	
 	
+	// erase stored player bodies
+	_player_bodies.erase(_player_bodies.begin(), _player_bodies.end());
+	
+	
 	// init box2d world
 	
-	b2Vec2 gravity(0.0f, -10.0f);
+	//b2Vec2 gravity(0.0f, -10.0f);
+	b2Vec2 gravity(0.0f, 0.0f);
 	bool doSleep = true;
 	m_world = new b2World(gravity, doSleep);
 	//m_world = new b2World(LevelLoader::GRAVITY, LevelLoader::DO_SLEEP);
@@ -131,6 +137,38 @@ bool LevelLoader::LevelLoader::Print(string &str)
 b2World* LevelLoader::LevelLoader::world()
 {
 	return m_world;
+}
+
+void LevelLoader::LevelLoader::accelerate_player(const int playerid, const float value)
+{
+	if (playerid > _player_bodies.size())
+	{
+		cout << "playerid: " << playerid << " out of bounds\n";
+		return;
+	}
+	
+	
+	int force = 100;
+	float angle = _player_bodies[playerid]->GetAngle();
+	if (value < 0) angle += 3.14159265;
+	float dx = -1 * sin(angle) * 100;
+	float dy = cos(angle) * 100;
+	
+	
+	_player_bodies[playerid]->ApplyForce(b2Vec2(dx, dy),
+		_player_bodies[playerid]->GetWorldCenter());
+}
+
+void LevelLoader::LevelLoader::steer_player(const int playerid, const float value)
+{
+	if (playerid > _player_bodies.size())
+	{
+		cout << "playerid: " << playerid << " out of bounds\n";
+		return;
+	}
+	
+	
+	_player_bodies[playerid]->ApplyTorque(-1 * value * 10);
 }
 	
 b2Body* LevelLoader::LevelLoader::createRectangle(const string id, const float& x, const float& y,

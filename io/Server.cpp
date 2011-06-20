@@ -21,28 +21,28 @@ using std::endl;
 
 
 Server::Server(boost::asio::io_service& io_service, short port, int update_interval,
-		const bool debug)
-		: io_service_(io_service), acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
-			_room(),
-			_update_interval(update_interval),
-			timer1(io_service, boost::posix_time::millisec(update_interval)),
-			m_world(0),
-			is_debug(debug)
+	const bool debug)
+	: io_service_(io_service), acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
+		_room(),
+		_update_interval(update_interval),
+		timer1(io_service, boost::posix_time::millisec(update_interval)),
+		m_world(0),
+		is_debug(debug)
+{
+	session_ptr new_session(new Session(io_service_, _room));
+	acceptor_.async_accept(new_session->socket(),
+		boost::bind(&Server::handle_accept, this, new_session,
+		boost::asio::placeholders::error));
+	timer1.async_wait(boost::bind(&Server::tick, this, boost::asio::placeholders::error));
+	
+	
+	if (debug)
 	{
-		session_ptr new_session(new Session(io_service_, _room));
-		acceptor_.async_accept(new_session->socket(),
-			boost::bind(&Server::handle_accept, this, new_session,
-				boost::asio::placeholders::error));
-		timer1.async_wait(boost::bind(&Server::tick, this, boost::asio::placeholders::error));
-		
-		
-		if (debug)
-		{
-			_pDebugDraw = new Debug();
-			if (!_pDebugDraw->init())
-				cout << "ERROR, server::Constructor, failed to initialize Debug\n";
-		}
+		_pDebugDraw = new Debug();
+		if (!_pDebugDraw->init())
+			cout << "ERROR, server::Constructor, failed to initialize Debug\n";
 	}
+}
 
 	
 void Server::handle_accept(session_ptr new_session, const boost::system::error_code& error)
@@ -97,8 +97,23 @@ void Server::tick(const boost::system::error_code& e)
 		
 		if (_xmessage.sAction() == "shut_down")
 		{
+			cout << "received shut_down request\n";
 			io_service_.stop();
 			return;
+		}
+		
+		
+		if (_xmessage.sAction() == "player_accelerate")
+		{
+			//cout << "player_accelerate action\n";
+			double value = atof(_xmessage.sValue().data());
+			_loader.accelerate_player(0, value);
+		}
+		
+		if (_xmessage.sAction() == "player_steer")
+		{
+			double value = atof(_xmessage.sValue().data());
+			_loader.steer_player(0, value);
 		}
 	}
 	

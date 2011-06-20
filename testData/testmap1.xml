@@ -3,15 +3,20 @@
 <map name="testmap1" scale="30">
 
 	<static-objects>
+		<rectangle id="rect10" x="0" y="10" width="30" height="1" />
+		<rectangle id="rect11" x="0" y="-10" width="30" height="1" />
+		<rectangle id="rect12" x="-13" y="0" width="1" height="20" />
+		<rectangle id="rect13" x="13" y="0" width="1" height="20" />
+		
+		<!--
 		<rectangle id="rect00" x="0" y="-1" width="40" height="1" />
-		<!-- comment here -->
 		<rectangle id="rect01" x="0" y="0" width="20" height="1" />
-		<!-- comment here -->
+		-->
 	</static-objects>
 	
 	<dynamic-objects>
-		<rectangle id="rect02" x="-5" y="10" width="0.25" height="0.25" rotation="30" />
-		<rectangle id="rect03" x="4" y="10" width="0.25" height="0.25" rotation="60" />
+		<rectangle id="rect02" x="-5" y="8" width="0.25" height="0.25" rotation="30" />
+		<rectangle id="rect03" x="-4" y="8" width="0.25" height="0.25" rotation="60" />
 		<!--<rectangle id="rect04" x="5" y="10" width="0.25" height="0.25" rotation="5" />
 		<rectangle id="rect05" x="6" y="10" width="0.25" height="0.25" rotation="10" />
 		-->

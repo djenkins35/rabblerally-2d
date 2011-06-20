@@ -12,7 +12,6 @@
 #include <iostream>
 #include <vector>
 #include <Box2D/Box2D.h>
-#include <cmath>
 
 #define TIXML_USE_STL
 #include "tinyxml/tinyxml.h"
@@ -32,11 +31,15 @@ using std::vector;
 class LevelLoader
 {
 public :
+	static const bool DO_SLEEP = true;
+	
 	void load_file(string filename);
 	string get_map_list();
 	bool Print(string &str);
 	b2World* world();
-
+	void accelerate_player(const int playerid, const float value);
+	void steer_player(const int playerid, const float value);
+	
 	
 private :
 	string _filename;

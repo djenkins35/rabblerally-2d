@@ -18,11 +18,13 @@ class XMLMessage
 public :
 	const string sAction();
 	const string sMap_name();
+	const string sValue();
 	void parse_string(const string s);
 	
 private :
 	string _action;
 	string _map_name;
+	string _value;
 };
 
 

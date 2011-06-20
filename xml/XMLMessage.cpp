@@ -26,6 +26,11 @@ using namespace std;
 	<key value="right" />
 </action>
 
+// movement actions determined by client, and validated by server
+//	eg) enable client-side custom keymapping
+<action type="player_steer" value="1" />
+<action type="player_accelerate" value="-1" />
+
 <action type="load_map" map_name="testmap1.xml" />
 <action type="get_map_list" />
 */
@@ -38,6 +43,11 @@ const string XMLMessage::sAction()
 const string XMLMessage::sMap_name()
 {
 	return _map_name;
+}
+
+const string XMLMessage::sValue()
+{
+	return _value;
 }
 
 void XMLMessage::parse_string(const string s)
@@ -88,6 +98,11 @@ void XMLMessage::parse_string(const string s)
 			
 			if (string(pAttrib->Name()) == "map_name")
 				_map_name = pAttrib->ValueStr();
+			
+			
+			// <action type="player_accelerate" value="-1" />
+			if (string(pAttrib->Name()) == "value")
+				_value = pAttrib->ValueStr();
 			
 			pAttrib=pAttrib->Next();
 		}

@@ -21,6 +21,8 @@ all: $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS) $(INCLUDES)
 
 $(OBJECTS) :
+#	$(CC) $(CFLAGS) -c $(SOURCES)
+
 
 .PHONY : clean
 clean:
