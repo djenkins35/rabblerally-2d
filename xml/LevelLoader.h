@@ -32,13 +32,13 @@ class LevelLoader
 {
 public :
 	static const bool DO_SLEEP = true;
+	static const string DATA_DIR;
 	
 	void load_file(string filename);
 	string get_map_list();
 	bool Print(string &str);
 	b2World* world();
-	void accelerate_player(const int playerid, const float value);
-	void steer_player(const int playerid, const float value);
+	vector<b2Body*> player_bodies();
 	
 	
 private :

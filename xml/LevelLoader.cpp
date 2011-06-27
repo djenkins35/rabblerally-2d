@@ -14,12 +14,14 @@ using std::cout;
 using std::endl;
 
 
+const string LevelLoader::DATA_DIR = "levelData";
+
 void LevelLoader::LevelLoader::load_file(string filename)
 {
 	_filename = filename;
 	cout << "level_loader::load_file(), loading filename: " << filename << endl;
 	
-	_doc = TiXmlDocument( "testData/" + _filename );
+	_doc = TiXmlDocument( DATA_DIR + "/" + _filename );
 	_doc.LoadFile();
 	
 	
@@ -139,38 +141,11 @@ b2World* LevelLoader::LevelLoader::world()
 	return m_world;
 }
 
-void LevelLoader::LevelLoader::accelerate_player(const int playerid, const float value)
+vector<b2Body*> LevelLoader::LevelLoader::player_bodies()
 {
-	if (playerid > _player_bodies.size())
-	{
-		cout << "playerid: " << playerid << " out of bounds\n";
-		return;
-	}
-	
-	
-	int force = 100;
-	float angle = _player_bodies[playerid]->GetAngle();
-	if (value < 0) angle += 3.14159265;
-	float dx = -1 * sin(angle) * 100;
-	float dy = cos(angle) * 100;
-	
-	
-	_player_bodies[playerid]->ApplyForce(b2Vec2(dx, dy),
-		_player_bodies[playerid]->GetWorldCenter());
+	return _player_bodies;
 }
 
-void LevelLoader::LevelLoader::steer_player(const int playerid, const float value)
-{
-	if (playerid > _player_bodies.size())
-	{
-		cout << "playerid: " << playerid << " out of bounds\n";
-		return;
-	}
-	
-	
-	_player_bodies[playerid]->ApplyTorque(-1 * value * 10);
-}
-	
 b2Body* LevelLoader::LevelLoader::createRectangle(const string id, const float& x, const float& y,
 	const float& w, const float& h, const float& rot, const b2BodyType type)
 {
@@ -403,12 +378,12 @@ TiXmlDocument* LevelLoader::LevelLoader::get_player_type(const string &sType)
 	
 	// load the player-object definition from file
 	
-	pCar_type = new TiXmlDocument("testData/" + sType + ".xml");
+	pCar_type = new TiXmlDocument(DATA_DIR + "/" + sType + ".xml");
 	pCar_type->LoadFile();
 	
 	if (pCar_type->Error())
 	{
-		cout << "ERROR, level_loader::createPlayer(), error: " << pCar_type->ErrorDesc() << endl;
+		cout << "ERROR, level_loader::get_player_type(), error: " << pCar_type->ErrorDesc() << endl;
 		return NULL;
 	}
 	
@@ -418,7 +393,7 @@ TiXmlDocument* LevelLoader::LevelLoader::get_player_type(const string &sType)
 	TiXmlHandle hRoot(pCar_type);
 	string sObjType;
 	hRoot.FirstChild("player-object").ToElement()->QueryStringAttribute("type", &sObjType);
-	cout << "level_loader::createPlayer(), adding object type: " << sObjType << endl;
+	cout << "level_loader::get_player_type(), adding object type: " << sObjType << endl;
 	_player_types.push_back(pCar_type);
 	
 	

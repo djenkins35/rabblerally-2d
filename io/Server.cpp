@@ -26,8 +26,9 @@ Server::Server(boost::asio::io_service& io_service, short port, int update_inter
 		_room(),
 		_update_interval(update_interval),
 		timer1(io_service, boost::posix_time::millisec(update_interval)),
-		m_world(0),
-		is_debug(debug)
+		//m_world(0),
+		is_debug(debug),
+		_world()
 {
 	session_ptr new_session(new Session(io_service_, _room));
 	acceptor_.async_accept(new_session->socket(),
@@ -77,14 +78,14 @@ void Server::tick(const boost::system::error_code& e)
 		if (_xmessage.sAction() == "load_map")
 		{
 			std::cout << "server::tick(), load map, " << _xmessage.sMap_name() << std::endl;
-			if (m_world != NULL) delete m_world;
 			_loader.load_file(_xmessage.sMap_name());
-			m_world = _loader.world();
+			_world.setWorld(_loader.world());
+			_world.setPlayerBodies(_loader.player_bodies());
 			
 			
 			// add world pointer to debug draw
 			if (is_debug && _pDebugDraw != NULL)
-				_pDebugDraw->add_b2World(m_world);
+				_pDebugDraw->add_b2World(_loader.world());
 			
 			
 			// send the level xml to each client
@@ -105,71 +106,29 @@ void Server::tick(const boost::system::error_code& e)
 		
 		if (_xmessage.sAction() == "player_accelerate")
 		{
-			//cout << "player_accelerate action\n";
 			double value = atof(_xmessage.sValue().data());
-			_loader.accelerate_player(0, value);
+			_world.accelerate_player(0, value);
 		}
 		
 		if (_xmessage.sAction() == "player_steer")
 		{
 			double value = atof(_xmessage.sValue().data());
-			_loader.steer_player(0, value);
+			_world.steer_player(0, value);
 		}
 	}
 	
 	
-	if (m_world != NULL)
+	_world.step(_update_interval);
+	
+	/*
+	// send data to clients
+	
+	if (s.length() > 0)
 	{
-		float fInterval = _update_interval;
-		m_world->Step(fInterval / 1000, 6, 2);
-		//cout << "\n\n--------step----------\n";
-		
-		b2Body* b = m_world->GetBodyList();
-		std::string s = "";
-		
-		while (b)
-		{
-			//cout << "body position: " << b->GetWorldCenter().x;
-			//cout << ", " << b->GetWorldCenter().y << endl;
-			
-			
-			if (b->GetType() != b2_staticBody
-				&& b->IsAwake())
-			{
-				// b2Body::GetUserData() returns a void pointer, so cast to whatever is 
-				//	stored there to be able to dereference it
-				std::string* pStr = static_cast<string*>(b->GetUserData());
-				// add to client update message
-				/*
-				cout << ", dynamic body " << *pStr;
-				cout << " position: " << b->GetWorldCenter().x;
-				cout << ", " << b->GetWorldCenter().y << endl;
-				//*/
-				
-				// create message
-				std::stringstream x, y, rot;
-				x << b->GetPosition().x;
-				y << b->GetPosition().y;
-				rot << b->GetAngle() * 180 / M_PI;
-				//cout << "b->GetAngle(): " << b->GetAngle();
-				//cout << ", rot.str(): " << rot.str() << endl;
-				s += "<object-update id=\"" + *pStr + "\""
-					+ " x=\"" + x.str() + "\" y=\"" + y.str() + "\""
-					+ " rotation=\"" + rot.str() + "\" />";
-			}
-			
-			b = b->GetNext();
-		}
-		
-		
-		// send data to clients
-		
-		if (s.length() > 0)
-		{
-			//s = "-------begin message--------\n" + s;
-			_room.deliver(s);
-		}
+		//s = "-------begin message--------\n" + s;
+		_room.deliver(s);
 	}
+	*/
 	
 	
 	if (is_debug && _pDebugDraw != NULL)
@@ -178,7 +137,7 @@ void Server::tick(const boost::system::error_code& e)
 		
 		if (_pDebugDraw->quit == true)
 		{
-			delete m_world;
+			//delete m_world;
 			io_service_.stop();
 			return;
 		}

@@ -4,6 +4,7 @@ SOURCES = io/GameRoom.cpp io/Session.cpp io/Server.cpp \
 	xml/LevelLoader.cpp xml/XMLMessage.cpp \
 	xml/tinyxml/tinyxml.cpp xml/tinyxml/tinystr.cpp \
 	xml/tinyxml/tinyxmlerror.cpp xml/tinyxml/tinyxmlparser.cpp \
+	world/WorldWrapper.cpp \
 	Main.cpp
 	
 OBJECTS = $(SOURCES:.cpp=.o)
@@ -26,4 +27,4 @@ $(OBJECTS) :
 
 .PHONY : clean
 clean:
-	rm -f *.o io/*.o debug/*.o xml/*.o $(EXECUTABLE)
+	rm -f *.o io/*.o debug/*.o xml/*.o world/*.o $(EXECUTABLE)

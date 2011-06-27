@@ -25,6 +25,7 @@
 #include "../xml/XMLMessage.h"
 #include "../xml/LevelLoader.h"
 #include "../debug/Debug.h"
+#include "../world/WorldWrapper.h"
 
 
 using boost::asio::ip::tcp;
@@ -49,8 +50,9 @@ private:
 	XMLMessage _xmessage;
 	LevelLoader::LevelLoader _loader;
 	int _update_interval;
-	b2World* m_world;
+	//b2World* m_world;
 	Debug* _pDebugDraw;
+	WorldWrapper _world;
 	
 	void handle_accept(session_ptr new_session, const boost::system::error_code& error);
 	void tick(const boost::system::error_code& e);
